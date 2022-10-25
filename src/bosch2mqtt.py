@@ -10,7 +10,7 @@ import time
 import paho.mqtt.client as mqtt
 import bosch_thermostat_client as bosch
 from bosch_thermostat_client.const.ivt import IVT
-from bosch_thermostat_client.const import HC, DHW, TYPE, RECORDINGS, HTTP
+from bosch_thermostat_client.const import HTTP
 
 logging.basicConfig()
 logging.getLogger().setLevel(logging.INFO)
@@ -22,12 +22,9 @@ mqtt_host = os.environ.get("MQTT_IP")
 mqtt_port = os.environ.get("MQTT_PORT")
 sleep = int(os.environ.get("MBLAN_SLEEP"))
 
-
-
 client = mqtt.Client(clean_session=True, transport="tcp")
-client.connect(host="192.168.70.100", port=1883, keepalive=60)
+client.connect(host=mqtt_host, port=mqtt_port, keepalive=60)
 client.loop_start()
-
 
 exclude_list = ['Pool temperature', 'Hotwater temp', 'Switch temp']
 
@@ -55,7 +52,6 @@ async def main():
                     topic = str(sensor.name.replace(" ", "/")).lower()
                     if sensor.name in exclude_list:
                         continue
-                    # print(str(sensor.name))
                     await sensor.update()
                     value = sensor.state
                     if value == "on":
@@ -63,17 +59,13 @@ async def main():
                     if value == "off":
                         value = 0
                     if isinstance(value, float):
-
-                        # print("topic: " + topic)
-                        dict = {
-                            "time" : now,
+                        payload = {
+                            "time": now,
                             "value": value
                         }
 
-                        client.publish("mblan/"+topic, payload=json.dumps(dict), qos=0, retain=False)
+                        client.publish("mblan/" + topic, payload=json.dumps(payload), qos=0, retain=False)
             time.sleep(sleep)
-        # await gateway.initialize_circuits(HC)
-        # await session.close()
 
 
 asyncio.get_event_loop().run_until_complete(main())
