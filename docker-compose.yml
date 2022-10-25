@@ -1,0 +1,20 @@
+version: '3'
+services:
+  home2graphite:
+    build:
+      context: bosch2graphite
+      dockerfile: Dockerfile
+    container_name: home2graphite
+    image: home2graphite
+    stdin_open: true
+    network_mode: host
+    tty: true
+    environment:
+      - GRAPHITE_PREFIX=${GRAPHITE_PREFIX}
+      - LOG_GRAPHITE=${LOG_GRAPHITE}
+      - GRAPHITE_IP=${GRAPHITE_IP}
+      - MBLAN_ACCESS_KEY=${MBLAN_ACCESS_KEY}
+      - MBLAN_PASSWORD=${MBLAN_PASSWORD}
+      - MBLAN_IP=${MBLAN_IP}
+      - MBLAN_SLEEP=${MBLAN_SLEEP}
+    restart: "unless-stopped"

@@ -1,0 +1,4 @@
+aionefit
+paho-mqtt
+bosch-thermostat-http-client
+bosch-thermostat-client
