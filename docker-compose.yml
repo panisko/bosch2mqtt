@@ -1,20 +1,19 @@
 version: '3'
 services:
-  home2graphite:
+  bosch2mqtt:
     build:
-      context: bosch2graphite
+      context: .
       dockerfile: Dockerfile
-    container_name: home2graphite
-    image: home2graphite
+    container_name: bosch2mqtt
+    image: bosch2mqtt:0.3
     stdin_open: true
     network_mode: host
     tty: true
     environment:
-      - GRAPHITE_PREFIX=${GRAPHITE_PREFIX}
-      - LOG_GRAPHITE=${LOG_GRAPHITE}
-      - GRAPHITE_IP=${GRAPHITE_IP}
       - MBLAN_ACCESS_KEY=${MBLAN_ACCESS_KEY}
       - MBLAN_PASSWORD=${MBLAN_PASSWORD}
       - MBLAN_IP=${MBLAN_IP}
       - MBLAN_SLEEP=${MBLAN_SLEEP}
+      - MQTT_IP=${MQTT_IP}
+      - MQTT_PORT=${MQTT_PORT}
     restart: "unless-stopped"

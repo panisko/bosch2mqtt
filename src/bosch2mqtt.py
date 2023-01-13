@@ -19,11 +19,12 @@ mblan_token = os.environ.get("MBLAN_ACCESS_KEY")
 mblan_password = os.environ.get("MBLAN_PASSWORD")
 mblan_ip = os.environ.get("MBLAN_IP")
 mqtt_host = os.environ.get("MQTT_IP")
-mqtt_port = os.environ.get("MQTT_PORT")
+mqtt_port = int(os.environ.get("MQTT_PORT"))
 sleep = int(os.environ.get("MBLAN_SLEEP"))
 
+
 client = mqtt.Client(clean_session=True, transport="tcp")
-client.connect(host=mqtt_host, port=mqtt_port, keepalive=60)
+client.connect(host=mqtt_host, port=1883, keepalive=60)
 client.loop_start()
 
 exclude_list = ['Pool temperature', 'Hotwater temp', 'Switch temp']
